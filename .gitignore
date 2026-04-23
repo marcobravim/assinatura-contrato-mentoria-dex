@@ -1,0 +1,22 @@
+node_modules
+dist
+.DS_Store
+*.log
+
+# env files
+.env
+.env.local
+.env.*.local
+
+# editor
+.vscode
+.idea
+
+# test artifacts
+playwright-report
+test-results
+.playwright
+
+# supabase
+supabase/.temp
+supabase/.branches

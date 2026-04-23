@@ -1,0 +1,7 @@
+project_id = "mlvcghqxchrismnxbnho"
+
+[functions.create-contract]
+verify_jwt = true
+
+[functions.autentique-webhook]
+verify_jwt = false
