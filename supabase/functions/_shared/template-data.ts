@@ -64,7 +64,7 @@ export function buildTemplateData(d: ClientData, opts: { comercial_email: string
     telefone: d.participante.telefone,
     email: d.participante.email,
     data_inicio: formatDate(d.data_inicio),
-    data_hoje: formatDate(new Date().toISOString().slice(0, 10)),
+    data_hoje: formatDate(todayInBrasiliaISO()),
     modalidade: d.modalidade === 'DUPLA' ? 'DUPLA' : 'INDIVIDUAL',
 
     // sócio (2ª cadeira) — conditional {#dupla} ... {/dupla}
@@ -117,4 +117,10 @@ function formatDate(iso: string) {
   if (!iso) return ''
   const [y, m, d] = iso.split('-')
   return `${d}/${m}/${y}`
+}
+
+// 'YYYY-MM-DD' da data corrente no fuso America/Sao_Paulo.
+// en-CA é o locale que por padrão formata datas como ISO YYYY-MM-DD.
+function todayInBrasiliaISO(): string {
+  return new Date().toLocaleDateString('en-CA', { timeZone: 'America/Sao_Paulo' })
 }

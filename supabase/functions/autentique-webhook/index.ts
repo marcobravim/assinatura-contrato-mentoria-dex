@@ -68,12 +68,15 @@ function sanitizeFilename(s: string): string {
   return s.replace(/[\/\\:*?"<>|]/g, '').replace(/\s+/g, ' ').trim()
 }
 
-function buildDriveFilename(mentoradoNome: string, when: Date): string {
-  const yyyy = when.getUTCFullYear()
-  const mm = String(when.getUTCMonth() + 1).padStart(2, '0')
-  const dd = String(when.getUTCDate()).padStart(2, '0')
+// en-CA formata datas como YYYY-MM-DD. Usamos com timeZone America/Sao_Paulo
+// pra que o nome do arquivo reflita a data de Brasília, não UTC.
+function brasiliaDateISO(): string {
+  return new Date().toLocaleDateString('en-CA', { timeZone: 'America/Sao_Paulo' })
+}
+
+function buildDriveFilename(mentoradoNome: string): string {
   const nome = sanitizeFilename(mentoradoNome || 'Mentorado')
-  return `${yyyy}-${mm}-${dd} - Contrato Dex - ${nome} [assinado].pdf`
+  return `${brasiliaDateISO()} - Contrato Dex - ${nome} [assinado].pdf`
 }
 
 async function processEvent(docId: string | null, evtType: string) {
@@ -139,7 +142,7 @@ async function processEvent(docId: string | null, evtType: string) {
     const bytes = new Uint8Array(await pdfRes.arrayBuffer())
 
     const mentoradoNome = (contract.client_data as { participante?: { nome?: string } })?.participante?.nome ?? ''
-    const filename = buildDriveFilename(mentoradoNome, new Date())
+    const filename = buildDriveFilename(mentoradoNome)
 
     const sa = loadServiceAccount()
     const driveToken = await getDriveAccessToken(sa, ['https://www.googleapis.com/auth/drive'])
