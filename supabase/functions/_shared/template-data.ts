@@ -64,6 +64,7 @@ export function buildTemplateData(d: ClientData, opts: { comercial_email: string
     telefone: d.participante.telefone,
     email: d.participante.email,
     data_inicio: formatDate(d.data_inicio),
+    data_termino: formatDate(addMonths(d.data_inicio, 12)),
     data_hoje: formatDate(todayInBrasiliaISO()),
     modalidade: d.modalidade === 'DUPLA' ? 'DUPLA' : 'INDIVIDUAL',
 
@@ -123,4 +124,12 @@ function formatDate(iso: string) {
 // en-CA é o locale que por padrão formata datas como ISO YYYY-MM-DD.
 function todayInBrasiliaISO(): string {
   return new Date().toLocaleDateString('en-CA', { timeZone: 'America/Sao_Paulo' })
+}
+
+// Soma `months` meses à data ISO yyyy-mm-dd. Usa Date.UTC pra evitar shift
+// de timezone. JS normaliza dias inválidos (ex: 29/02 + 12m = 01/03).
+function addMonths(iso: string, months: number): string {
+  const [y, m, d] = iso.split('-').map(Number)
+  const dt = new Date(Date.UTC(y, m - 1 + months, d))
+  return dt.toISOString().slice(0, 10)
 }

@@ -12,6 +12,7 @@ const data = {
   telefone: '(11) 99999-8888',
   email: 'joao.silva@exemplo.com',
   data_inicio: '15/05/2026',
+  data_termino: '15/05/2027',
   data_hoje: '22/04/2026',
   modalidade: 'DUPLA',
   dupla: true,

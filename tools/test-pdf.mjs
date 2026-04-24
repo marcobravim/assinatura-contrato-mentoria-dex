@@ -28,6 +28,7 @@ doc.render({
   telefone: '(11) 99999-8888',
   email: 'teste@exemplo.com',
   data_inicio: '15/05/2026',
+  data_termino: '15/05/2027',
   data_hoje: '22/04/2026',
   modalidade: 'INDIVIDUAL',
   dupla: false,

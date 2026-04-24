@@ -49,6 +49,7 @@ const doc = new Document({
         runs([new TextRun({ text: 'ENDEREÇO: ', bold: true }), new TextRun({ text: '{endereco}' })]),
         runs([new TextRun({ text: 'TELEFONE/WHATSAPP (COM DDD): ', bold: true }), new TextRun({ text: '{telefone}' })]),
         runs([new TextRun({ text: 'DATA DE INÍCIO: ', bold: true }), new TextRun({ text: '{data_inicio}' })]),
+        runs([new TextRun({ text: 'DATA DE TÉRMINO: ', bold: true }), new TextRun({ text: '{data_termino}' })]),
         runs([new TextRun({ text: 'E-MAIL: ', bold: true }), new TextRun({ text: '{email}' })]),
         spacer(),
 
@@ -78,7 +79,9 @@ const doc = new Document({
         runs([
           new TextRun({ text: 'O acesso ao programa e a todos os seus respectivos materiais físicos e digitais é de caráter pessoal e intransferível, sendo permitido apenas aos titulares da compra identificados neste formulário. O acesso ficará disponível por 12 meses a partir de ' }),
           new TextRun({ text: '{data_inicio}', bold: true }),
-          new TextRun({ text: '.' }),
+          new TextRun({ text: ' (até ' }),
+          new TextRun({ text: '{data_termino}', bold: true }),
+          new TextRun({ text: ').' }),
         ]),
 
         P('Ao entrar no programa, o participante se compromete a manter todos os seus dados pessoais atualizados, bem como a efetuar os pagamentos nos termos contratados e nas datas acordadas, conforme o quadro abaixo. O não cumprimento do pagamento na data acordada acarretará a suspensão ou o cancelamento dos serviços, acessos e entrega de materiais físicos e digitais, sem prévio aviso.'),
@@ -88,7 +91,9 @@ const doc = new Document({
         runs([
           new TextRun({ text: 'Ao adquirir o programa, o participante tem o direito de permanecer por até 12 meses a partir de ' }),
           new TextRun({ text: '{data_inicio}', bold: true }),
-          new TextRun({ text: ', mantendo os entregáveis e materiais durante esse período e enquanto o plano contratado estiver ativo.' }),
+          new TextRun({ text: ' (até ' }),
+          new TextRun({ text: '{data_termino}', bold: true }),
+          new TextRun({ text: '), mantendo os entregáveis e materiais durante esse período e enquanto o plano contratado estiver ativo.' }),
         ]),
         spacer(),
 
@@ -134,6 +139,14 @@ const doc = new Document({
         P('Não é permitido utilizar os meios de comunicação da mentoria para divulgar serviços ou produtos, anunciar vagas, realizar enquetes ou entrevistas, próprias ou de terceiros, sem autorização prévia da Coordenação.'),
         P('Não é permitido formar grupos paralelos em WhatsApp, Telegram, e-mail ou redes sociais, sob pena de exclusão imediata do participante.'),
         P('Não há garantia incondicional de ganhos financeiros: os resultados dependem exclusivamente da dedicação, do esforço e da aplicação correta do método por parte de cada participante. Caso esteja insatisfeito, o participante deverá comunicar a equipe para a devida avaliação, caso a caso.'),
+        spacer(),
+
+        H('CLÁUSULA DE DESISTÊNCIA'),
+        P('Em caso de desistência por parte do participante após a assinatura deste contrato, será devida multa compensatória de 20% (vinte por cento) sobre o valor restante do contrato, entendido como:'),
+        P('a) na modalidade à vista, o valor total do contrato subtraído do que foi efetivamente pago até a data da comunicação da desistência;'),
+        P('b) na modalidade a prazo, o somatório das parcelas ainda não vencidas na data da comunicação da desistência.'),
+        P('A desistência deverá ser comunicada por escrito à CONTRATADA, preferencialmente pelos canais oficiais informados no programa. O prazo para quitação da multa é de 10 (dez) dias corridos a contar da data da comunicação formal.'),
+        P('A multa prevista nesta cláusula não se confunde com parcelas já vencidas e não pagas, que permanecem plenamente exigíveis.'),
         spacer(),
 
         H('GARANTIA CONDICIONAL'),
