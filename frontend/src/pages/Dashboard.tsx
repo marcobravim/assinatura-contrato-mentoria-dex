@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { StatusBadge } from '@/components/StatusBadge'
 import { formatCurrency } from '@/lib/format'
-import { Plus, LogOut } from 'lucide-react'
+import { Plus, LogOut, Trash2 } from 'lucide-react'
 
 export function Dashboard() {
   const [contracts, setContracts] = useState<Contract[]>([])
@@ -42,6 +42,23 @@ export function Dashboard() {
 
   async function handleLogout() {
     await supabase.auth.signOut()
+  }
+
+  async function handleDelete(c: Contract, e: React.MouseEvent) {
+    e.preventDefault()
+    e.stopPropagation()
+    const ok = window.confirm(
+      `Apagar o contrato de ${c.client_data.participante.nome}?\n\nIsso remove o registro do sistema, o PDF do Drive (vai pra lixeira, recuperável 30 dias) e o documento da Autentique. Não dá pra desfazer.`,
+    )
+    if (!ok) return
+    setContracts((prev) => prev.filter((x) => x.id !== c.id))
+    const { error } = await supabase.functions.invoke('delete-contract', { body: { contract_id: c.id } })
+    if (error) {
+      window.alert(`Falha ao apagar: ${error.message}`)
+      // rollback otimístico — recarrega
+      const { data } = await supabase.from('contracts').select('*').order('created_at', { ascending: false })
+      if (data) setContracts(data as Contract[])
+    }
   }
 
   return (
@@ -81,7 +98,18 @@ export function Dashboard() {
                     {c.client_data.participante.nome}
                   </Link>
                 </CardTitle>
-                <StatusBadge status={c.status} />
+                <div className="flex items-center gap-2">
+                  <StatusBadge status={c.status} />
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    onClick={(e) => handleDelete(c, e)}
+                    aria-label="Apagar contrato"
+                    className="h-8 w-8 text-muted-foreground hover:text-destructive"
+                  >
+                    <Trash2 className="h-4 w-4" />
+                  </Button>
+                </div>
               </CardHeader>
               <CardContent className="text-sm text-muted-foreground">
                 <div className="flex flex-wrap gap-x-4 gap-y-1">

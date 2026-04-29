@@ -1,16 +1,18 @@
 import { useEffect, useState } from 'react'
-import { Link, useParams } from 'react-router-dom'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 import { supabase, type Contract } from '@/lib/supabase'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { StatusBadge } from '@/components/StatusBadge'
 import { formatCurrency } from '@/lib/format'
-import { ArrowLeft, ExternalLink } from 'lucide-react'
+import { ArrowLeft, ExternalLink, Trash2 } from 'lucide-react'
 
 export function ContractDetail() {
   const { id } = useParams<{ id: string }>()
+  const nav = useNavigate()
   const [contract, setContract] = useState<Contract | null>(null)
   const [loading, setLoading] = useState(true)
+  const [deleting, setDeleting] = useState(false)
 
   useEffect(() => {
     if (!id) return
@@ -36,6 +38,22 @@ export function ContractDetail() {
       supabase.removeChannel(channel)
     }
   }, [id])
+
+  async function handleDelete() {
+    if (!contract) return
+    const ok = window.confirm(
+      `Apagar o contrato de ${contract.client_data.participante.nome}?\n\nIsso remove o registro do sistema, o PDF do Drive (vai pra lixeira, recuperável 30 dias) e o documento da Autentique. Não dá pra desfazer.`,
+    )
+    if (!ok) return
+    setDeleting(true)
+    const { error } = await supabase.functions.invoke('delete-contract', { body: { contract_id: contract.id } })
+    setDeleting(false)
+    if (error) {
+      window.alert(`Falha ao apagar: ${error.message}`)
+      return
+    }
+    nav('/', { replace: true })
+  }
 
   if (loading) return <div className="container py-8">Carregando…</div>
   if (!contract) return <div className="container py-8">Contrato não encontrado.</div>
@@ -102,6 +120,12 @@ export function ContractDetail() {
               </a>
             </Button>
           )}
+
+          <div className="border-t pt-4">
+            <Button variant="destructive" onClick={handleDelete} disabled={deleting}>
+              <Trash2 className="h-4 w-4" /> {deleting ? 'Apagando…' : 'Apagar contrato'}
+            </Button>
+          </div>
         </CardContent>
       </Card>
     </div>
