@@ -6,6 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { StatusBadge } from '@/components/StatusBadge'
 import { formatCurrency } from '@/lib/format'
 import { Plus, LogOut, Trash2 } from 'lucide-react'
+import { TourButton } from '@/components/Tour'
 
 export function Dashboard() {
   const [contracts, setContracts] = useState<Contract[]>([])
@@ -64,17 +65,18 @@ export function Dashboard() {
   return (
     <div className="container py-8">
       <div className="mb-6 flex items-center justify-between">
-        <div>
+        <div data-tour="dashboard-title">
           <h1 className="text-3xl font-bold tracking-tight">Assinatura de Contrato - Mentoria DEX</h1>
           <p className="text-muted-foreground">Seus contratos enviados para assinatura</p>
         </div>
         <div className="flex gap-2">
-          <Button asChild>
+          <TourButton />
+          <Button asChild data-tour="novo-contrato">
             <Link to="/novo">
               <Plus className="h-4 w-4" /> Novo contrato
             </Link>
           </Button>
-          <Button variant="outline" size="icon" onClick={handleLogout} aria-label="Sair">
+          <Button variant="outline" size="icon" onClick={handleLogout} aria-label="Sair" data-tour="sair">
             <LogOut className="h-4 w-4" />
           </Button>
         </div>
@@ -89,8 +91,8 @@ export function Dashboard() {
           </CardContent>
         </Card>
       ) : (
-        <div className="grid gap-3">
-          {contracts.map((c) => (
+        <div className="grid gap-3" data-tour="contratos-lista">
+          {contracts.map((c, i) => (
             <Card key={c.id} className="transition-shadow hover:shadow-md">
               <CardHeader className="flex-row items-center justify-between space-y-0 pb-2">
                 <CardTitle className="text-base">
@@ -99,13 +101,16 @@ export function Dashboard() {
                   </Link>
                 </CardTitle>
                 <div className="flex items-center gap-2">
-                  <StatusBadge status={c.status} />
+                  <span data-tour={i === 0 ? 'status-badge' : undefined}>
+                    <StatusBadge status={c.status} />
+                  </span>
                   <Button
                     variant="ghost"
                     size="icon"
                     onClick={(e) => handleDelete(c, e)}
                     aria-label="Apagar contrato"
                     className="h-8 w-8 text-muted-foreground hover:text-destructive"
+                    data-tour={i === 0 ? 'apagar-contrato' : undefined}
                   >
                     <Trash2 className="h-4 w-4" />
                   </Button>

@@ -133,12 +133,12 @@ export function NewContract() {
               </Button>
             </div>
 
-            <div className="grid gap-2">
+            <div className="flex flex-col gap-2">
               <Label htmlFor="data_inicio">Data de início</Label>
               <Input id="data_inicio" type="date" {...register('data_inicio')} />
               {errors.data_inicio && <p className="text-xs text-destructive">{errors.data_inicio.message}</p>}
             </div>
-            <div className="grid gap-2">
+            <div className="flex flex-col gap-2">
               <Label htmlFor="valor_entrada_reserva">Valor da reserva / sinal (R$)</Label>
               <Input id="valor_entrada_reserva" type="number" step="0.01" {...register('valor_entrada_reserva')} />
               <p className="text-xs text-muted-foreground">
@@ -152,27 +152,27 @@ export function NewContract() {
         <Card>
           <CardHeader><CardTitle>Dados do Participante</CardTitle></CardHeader>
           <CardContent className="grid gap-4 sm:grid-cols-2">
-            <div className="grid gap-2 sm:col-span-2">
+            <div className="flex flex-col gap-2 sm:col-span-2">
               <Label>Nome completo</Label>
               <Input {...register('participante.nome')} />
               {errors.participante?.nome && <p className="text-xs text-destructive">{errors.participante.nome.message}</p>}
             </div>
-            <div className="grid gap-2">
+            <div className="flex flex-col gap-2">
               <Label>CPF ou CNPJ</Label>
               <Input value={formatCPFOrCNPJ(watch('participante.cpf_cnpj') ?? '')} onChange={(e) => setValue('participante.cpf_cnpj', e.target.value)} />
               {errors.participante?.cpf_cnpj && <p className="text-xs text-destructive">{errors.participante.cpf_cnpj.message}</p>}
             </div>
-            <div className="grid gap-2">
+            <div className="flex flex-col gap-2">
               <Label>Telefone / WhatsApp (com DDD)</Label>
               <Input value={formatPhone(watch('participante.telefone') ?? '')} onChange={(e) => setValue('participante.telefone', e.target.value)} />
               {errors.participante?.telefone && <p className="text-xs text-destructive">{errors.participante.telefone.message}</p>}
             </div>
-            <div className="grid gap-2 sm:col-span-2">
+            <div className="flex flex-col gap-2 sm:col-span-2">
               <Label>E-mail (Autentique manda o link aqui)</Label>
               <Input type="email" {...register('participante.email')} />
               {errors.participante?.email && <p className="text-xs text-destructive">{errors.participante.email.message}</p>}
             </div>
-            <div className="grid gap-2 sm:col-span-2">
+            <div className="flex flex-col gap-2 sm:col-span-2">
               <Label>Endereço completo</Label>
               <div className="flex gap-2">
                 <Input placeholder="CEP (opcional, para auto-preencher)" value={cepBusca} onChange={(e) => setCepBusca(e.target.value)} className="max-w-[180px]" />
@@ -190,19 +190,19 @@ export function NewContract() {
           <Card>
             <CardHeader><CardTitle>Dados do Sócio (2ª cadeira)</CardTitle></CardHeader>
             <CardContent className="grid gap-4 sm:grid-cols-2">
-              <div className="grid gap-2 sm:col-span-2">
+              <div className="flex flex-col gap-2 sm:col-span-2">
                 <Label>Nome completo</Label>
                 <Input {...register('socio.nome')} />
               </div>
-              <div className="grid gap-2">
+              <div className="flex flex-col gap-2">
                 <Label>CPF ou CNPJ</Label>
                 <Input value={formatCPFOrCNPJ(watch('socio.cpf_cnpj') ?? '')} onChange={(e) => setValue('socio.cpf_cnpj', e.target.value)} />
               </div>
-              <div className="grid gap-2">
+              <div className="flex flex-col gap-2">
                 <Label>Telefone / WhatsApp</Label>
                 <Input value={formatPhone(watch('socio.telefone') ?? '')} onChange={(e) => setValue('socio.telefone', e.target.value)} />
               </div>
-              <div className="grid gap-2 sm:col-span-2">
+              <div className="flex flex-col gap-2 sm:col-span-2">
                 <Label>E-mail</Label>
                 <Input type="email" {...register('socio.email')} />
               </div>
@@ -224,15 +224,15 @@ export function NewContract() {
 
             {formaPgto === 'VISTA' ? (
               <div className="grid gap-4 sm:grid-cols-3">
-                <div className="grid gap-2">
+                <div className="flex flex-col gap-2">
                   <Label>Valor total (R$)</Label>
                   <Input type="number" step="0.01" {...register('pagamento.valor_total')} />
                 </div>
-                <div className="grid gap-2">
+                <div className="flex flex-col gap-2">
                   <Label>Data do pagamento</Label>
                   <Input type="date" {...register('pagamento.data' as const)} />
                 </div>
-                <div className="grid gap-2">
+                <div className="flex flex-col gap-2">
                   <Label>Meio de pagamento</Label>
                   <select
                     className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
@@ -246,11 +246,11 @@ export function NewContract() {
               </div>
             ) : (
               <div className="grid gap-4 sm:grid-cols-3">
-                <div className="grid gap-2">
+                <div className="flex flex-col gap-2">
                   <Label>Valor total (R$)</Label>
                   <Input type="number" step="0.01" {...register('pagamento.valor_total')} />
                 </div>
-                <div className="grid gap-2">
+                <div className="flex flex-col gap-2">
                   <Label>Meio de pagamento</Label>
                   <select
                     className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
@@ -262,24 +262,24 @@ export function NewContract() {
                   </select>
                 </div>
                 <div className="grid gap-2 sm:col-span-1" />
-                <div className="grid gap-2">
+                <div className="flex flex-col gap-2">
                   <Label>Entrada (R$)</Label>
                   <Input type="number" step="0.01" {...register('pagamento.entrada_valor' as const)} />
                 </div>
-                <div className="grid gap-2">
+                <div className="flex flex-col gap-2">
                   <Label>Data da entrada</Label>
                   <Input type="date" {...register('pagamento.entrada_data' as const)} />
                 </div>
                 <div className="grid gap-2 sm:col-span-1" />
-                <div className="grid gap-2">
+                <div className="flex flex-col gap-2">
                   <Label>Nº de parcelas</Label>
                   <Input type="number" {...register('pagamento.parcelas_count' as const)} />
                 </div>
-                <div className="grid gap-2">
+                <div className="flex flex-col gap-2">
                   <Label>Valor de cada parcela (R$)</Label>
                   <Input type="number" step="0.01" {...register('pagamento.parcela_valor' as const)} />
                 </div>
-                <div className="grid gap-2">
+                <div className="flex flex-col gap-2">
                   <Label>Data da 1ª cobrança</Label>
                   <Input type="date" {...register('pagamento.parcela_primeira_data' as const)} />
                 </div>
