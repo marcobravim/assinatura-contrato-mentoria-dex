@@ -6,41 +6,56 @@ import { GraduationCap } from 'lucide-react'
 // Tour guiado passo a passo. Os steps usam seletores `data-tour="..."`
 // nos elementos da página — facilita refatorar HTML sem quebrar o tour.
 // O usuário pode pular ou fechar a qualquer momento.
-const dashboardSteps: Step[] = [
+const newContractSteps: Step[] = [
   {
-    target: '[data-tour="dashboard-title"]',
-    content: 'Bem-vindo! Aqui você acompanha todos os contratos enviados pra assinatura.',
+    target: '[data-tour="modalidade"]',
+    content: 'Comece escolhendo a modalidade. Individual = 1 mentorado. Dupla = 2 mentorados (a 2ª cadeira aparece como uma seção extra abaixo).',
     placement: 'bottom',
     skipBeacon: true,
   },
   {
-    target: '[data-tour="novo-contrato"]',
-    content: 'Pra criar um contrato novo, clique aqui. Você vai preencher os dados do mentorado e o sistema gera tudo automaticamente.',
+    target: '[data-tour="data-inicio"]',
+    content: 'Data em que a mentoria começa pra esse cliente. A data de término é calculada automaticamente como início + 12 meses.',
     placement: 'bottom',
   },
   {
-    target: '[data-tour="contratos-lista"]',
-    content: 'Cada cartão é um contrato. Clique no nome pra ver detalhes, abrir o link de assinatura ou baixar o PDF assinado.',
+    target: '[data-tour="valor-reserva"]',
+    content: 'Quanto o cliente pagou como sinal pra garantir a vaga. Geralmente é o mesmo valor da entrada do parcelamento, mas pode ser diferente se houver sinal pago à parte.',
+    placement: 'bottom',
+  },
+  {
+    target: '[data-tour="participante"]',
+    content: 'Dados do mentorado: nome, CPF/CNPJ, telefone e e-mail. O e-mail é onde a Autentique manda o link de assinatura — confira bem.',
     placement: 'top',
   },
   {
-    target: '[data-tour="status-badge"]',
-    content: 'O selo colorido mostra em que etapa o contrato está: Enviado (aguardando), Visualizado, Assinado pelo mentorado, ou Arquivado (assinado pelos dois e salvo no Drive).',
-    placement: 'left',
+    target: '[data-tour="endereco"]',
+    content: 'Pra preencher rápido, digite o CEP e clique em Buscar — o sistema completa logradouro, bairro e cidade. Você pode ajustar depois.',
+    placement: 'top',
   },
   {
-    target: '[data-tour="apagar-contrato"]',
-    content: 'Pra apagar um contrato (em testes ou cancelado), clique aqui. Remove tudo de uma vez: dashboard, Drive e Autentique.',
-    placement: 'left',
+    target: '[data-tour="forma-pagamento"]',
+    content: 'Pagamento integral = uma única passada (cartão de uma vez, PIX, etc). Entrada + parcelado = sinal hoje + N cobranças mensais.',
+    placement: 'top',
   },
   {
-    target: '[data-tour="sair"]',
-    content: 'Pra sair do sistema, use esse botão. Pronto, você já sabe usar! 🎉',
-    placement: 'left',
+    target: '[data-tour="meio-pagamento"]',
+    content: 'Selecione como o cliente vai pagar: Cartão de crédito, PIX ou Boleto. Aparece exatamente assim no contrato (ex: "via Cartão de crédito").',
+    placement: 'top',
+  },
+  {
+    target: '[data-tour="parcelamento"]',
+    content: 'Se for parcelado: preencha entrada (valor + data), depois nº de parcelas, valor de cada uma e a data da 1ª cobrança. As outras são mensais a partir dela.',
+    placement: 'top',
+  },
+  {
+    target: '[data-tour="enviar"]',
+    content: 'Quando tudo estiver preenchido, clique aqui. O sistema gera o PDF, manda pra Autentique e cria o link de assinatura. Pronto! 🎉',
+    placement: 'top',
   },
 ]
 
-export function TourButton({ steps = dashboardSteps }: { steps?: Step[] }) {
+export function TourButton({ steps = newContractSteps }: { steps?: Step[] }) {
   const [run, setRun] = useState(false)
 
   function handleEvent(data: EventData) {

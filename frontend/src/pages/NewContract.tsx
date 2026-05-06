@@ -11,6 +11,7 @@ import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { ArrowLeft, Loader2, MapPin } from 'lucide-react'
+import { TourButton } from '@/components/Tour'
 
 export function NewContract() {
   const nav = useNavigate()
@@ -114,9 +115,12 @@ export function NewContract() {
 
   return (
     <div className="container max-w-3xl py-8">
-      <Button asChild variant="ghost" className="mb-4">
-        <Link to="/"><ArrowLeft className="h-4 w-4" /> Voltar</Link>
-      </Button>
+      <div className="mb-4 flex items-center justify-between">
+        <Button asChild variant="ghost">
+          <Link to="/"><ArrowLeft className="h-4 w-4" /> Voltar</Link>
+        </Button>
+        <TourButton />
+      </div>
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
         <Card>
@@ -124,7 +128,7 @@ export function NewContract() {
             <CardTitle>Modalidade</CardTitle>
           </CardHeader>
           <CardContent className="grid gap-4 sm:grid-cols-2">
-            <div className="flex gap-2 sm:col-span-2">
+            <div className="flex gap-2 sm:col-span-2" data-tour="modalidade">
               <Button type="button" variant={modalidade === 'INDIVIDUAL' ? 'default' : 'outline'} onClick={() => setModalidade('INDIVIDUAL')}>
                 Individual
               </Button>
@@ -133,12 +137,12 @@ export function NewContract() {
               </Button>
             </div>
 
-            <div className="flex flex-col gap-2">
+            <div className="flex flex-col gap-2" data-tour="data-inicio">
               <Label htmlFor="data_inicio">Data de início</Label>
               <Input id="data_inicio" type="date" {...register('data_inicio')} />
               {errors.data_inicio && <p className="text-xs text-destructive">{errors.data_inicio.message}</p>}
             </div>
-            <div className="flex flex-col gap-2">
+            <div className="flex flex-col gap-2" data-tour="valor-reserva">
               <Label htmlFor="valor_entrada_reserva">Valor da reserva / sinal (R$)</Label>
               <Input id="valor_entrada_reserva" type="number" step="0.01" {...register('valor_entrada_reserva')} />
               <p className="text-xs text-muted-foreground">
@@ -149,7 +153,7 @@ export function NewContract() {
           </CardContent>
         </Card>
 
-        <Card>
+        <Card data-tour="participante">
           <CardHeader><CardTitle>Dados do Participante</CardTitle></CardHeader>
           <CardContent className="grid gap-4 sm:grid-cols-2">
             <div className="flex flex-col gap-2 sm:col-span-2">
@@ -172,7 +176,7 @@ export function NewContract() {
               <Input type="email" {...register('participante.email')} />
               {errors.participante?.email && <p className="text-xs text-destructive">{errors.participante.email.message}</p>}
             </div>
-            <div className="flex flex-col gap-2 sm:col-span-2">
+            <div className="flex flex-col gap-2 sm:col-span-2" data-tour="endereco">
               <Label>Endereço completo</Label>
               <div className="flex gap-2">
                 <Input placeholder="CEP (opcional, para auto-preencher)" value={cepBusca} onChange={(e) => setCepBusca(e.target.value)} className="max-w-[180px]" />
@@ -213,7 +217,7 @@ export function NewContract() {
         <Card>
           <CardHeader><CardTitle>Forma de Pagamento</CardTitle></CardHeader>
           <CardContent className="grid gap-4">
-            <div className="flex gap-2">
+            <div className="flex gap-2" data-tour="forma-pagamento">
               <Button type="button" variant={formaPgto === 'VISTA' ? 'default' : 'outline'} onClick={() => setFormaPgto('VISTA')}>
                 Pagamento integral
               </Button>
@@ -232,7 +236,7 @@ export function NewContract() {
                   <Label>Data do pagamento</Label>
                   <Input type="date" {...register('pagamento.data' as const)} />
                 </div>
-                <div className="flex flex-col gap-2">
+                <div className="flex flex-col gap-2" data-tour="meio-pagamento">
                   <Label>Meio de pagamento</Label>
                   <select
                     className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
@@ -245,12 +249,12 @@ export function NewContract() {
                 </div>
               </div>
             ) : (
-              <div className="grid gap-4 sm:grid-cols-3">
+              <div className="grid gap-4 sm:grid-cols-3" data-tour="parcelamento">
                 <div className="flex flex-col gap-2">
                   <Label>Valor total (R$)</Label>
                   <Input type="number" step="0.01" {...register('pagamento.valor_total')} />
                 </div>
-                <div className="flex flex-col gap-2">
+                <div className="flex flex-col gap-2" data-tour="meio-pagamento">
                   <Label>Meio de pagamento</Label>
                   <select
                     className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
@@ -290,7 +294,7 @@ export function NewContract() {
 
         {erro && <p className="text-sm text-destructive">{erro}</p>}
 
-        <div className="flex justify-end gap-2">
+        <div className="flex justify-end gap-2" data-tour="enviar">
           <Button type="button" variant="outline" asChild><Link to="/">Cancelar</Link></Button>
           <Button type="submit" disabled={submitting}>
             {submitting ? <><Loader2 className="h-4 w-4 animate-spin" /> Gerando…</> : 'Gerar e enviar para assinatura'}
