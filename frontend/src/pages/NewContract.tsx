@@ -84,26 +84,32 @@ export function NewContract() {
     }
   }
 
+  // Trocar a forma de pagamento exige reset do sub-tree porque react-hook-form
+  // mantém os campos do PRAZO registrados mesmo após setValue('pagamento', {VISTA})
+  // — o discriminated union do zod então falha. form.reset reescreve o objeto.
   function setFormaPgto(f: 'VISTA' | 'PRAZO') {
-    if (f === 'VISTA') {
-      setValue('pagamento', {
-        forma: 'VISTA',
-        valor_total: watch('pagamento.valor_total') ?? 19997,
-        data: new Date().toISOString().slice(0, 10),
-        meio_pagamento: 'Cartão de crédito',
-      })
-    } else {
-      setValue('pagamento', {
-        forma: 'PRAZO',
-        valor_total: 24997,
-        entrada_valor: 1997,
-        entrada_data: new Date().toISOString().slice(0, 10),
-        parcelas_count: 10,
-        parcela_valor: 2300,
-        parcela_primeira_data: new Date().toISOString().slice(0, 10),
-        meio_pagamento: 'Cartão de crédito',
-      })
-    }
+    const current = form.getValues()
+    const today = new Date().toISOString().slice(0, 10)
+    form.reset({
+      ...current,
+      pagamento: f === 'VISTA'
+        ? {
+            forma: 'VISTA',
+            valor_total: current.pagamento?.valor_total ?? 19997,
+            data: today,
+            meio_pagamento: 'Cartão de crédito',
+          }
+        : {
+            forma: 'PRAZO',
+            valor_total: current.pagamento?.valor_total ?? 24997,
+            entrada_valor: 1997,
+            entrada_data: today,
+            parcelas_count: 10,
+            parcela_valor: 2300,
+            parcela_primeira_data: today,
+            meio_pagamento: 'Cartão de crédito',
+          },
+    })
   }
 
   return (
