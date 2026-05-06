@@ -20,3 +20,6 @@ test-results
 # supabase
 supabase/.temp
 supabase/.branches
+
+# claude code session artifacts
+.claude/scheduled_tasks.lock
