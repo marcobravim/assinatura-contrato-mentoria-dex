@@ -167,12 +167,14 @@ const doc = new Document({
         // Bloco À Vista
         P('{#forma_vista}'),
         runs([
-          new TextRun({ text: 'Pagamento à vista de ' }),
+          new TextRun({ text: 'Pagamento integral de ' }),
           new TextRun({ text: '{valor_total}', bold: true }),
           new TextRun({ text: ' em ' }),
           new TextRun({ text: '{vista_data}', bold: true }),
           new TextRun({ text: ', via ' }),
           new TextRun({ text: '{vista_meio}' }),
+          // " em Nx" quando o cliente parcelou no cartão; vazio caso contrário
+          new TextRun({ text: '{vista_parcelas_label}' }),
           new TextRun({ text: '.' }),
         ]),
         P('{/forma_vista}'),

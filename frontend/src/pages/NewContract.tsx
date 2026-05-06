@@ -43,6 +43,7 @@ export function NewContract() {
   const { register, handleSubmit, setValue, watch, formState: { errors } } = form
   const modalidade = watch('modalidade')
   const formaPgto = watch('pagamento.forma')
+  const meioPgto = watch('pagamento.meio_pagamento')
 
   async function handleCepLookup() {
     const addr = await lookupCEP(cepBusca)
@@ -99,6 +100,7 @@ export function NewContract() {
             valor_total: current.pagamento?.valor_total ?? 19997,
             data: today,
             meio_pagamento: 'Cartão de crédito',
+            parcelas_cartao: 1,
           }
         : {
             forma: 'PRAZO',
@@ -247,6 +249,22 @@ export function NewContract() {
                     <option>Boleto</option>
                   </select>
                 </div>
+                {meioPgto === 'Cartão de crédito' && (
+                  <div className="flex flex-col gap-2 sm:col-span-3">
+                    <Label htmlFor="parcelas_cartao">Em quantas vezes no cartão?</Label>
+                    <Input
+                      id="parcelas_cartao"
+                      type="number"
+                      min={1}
+                      max={24}
+                      className="max-w-[180px]"
+                      {...register('pagamento.parcelas_cartao' as const)}
+                    />
+                    <p className="text-xs text-muted-foreground">
+                      Quantas parcelas no cartão do cliente. A Cris recebe o valor integral; só pra registrar no contrato (1 = à vista).
+                    </p>
+                  </div>
+                )}
               </div>
             ) : (
               <div className="grid gap-4 sm:grid-cols-3" data-tour="parcelamento">

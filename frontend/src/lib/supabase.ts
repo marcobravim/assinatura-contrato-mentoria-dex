@@ -32,7 +32,15 @@ export interface Socio {
 export type MeioPagamento = 'Cartão de crédito' | 'PIX' | 'Boleto'
 
 export type Pagamento =
-  | { forma: 'VISTA'; valor_total: number; data: string; meio_pagamento: MeioPagamento }
+  | {
+      forma: 'VISTA'
+      valor_total: number
+      data: string
+      meio_pagamento: MeioPagamento
+      // Quando meio=Cartão de crédito, em quantas vezes o cliente parcelou
+      // (a Cris recebe integral, é só pra controle/contrato). 1 = à vista no cartão.
+      parcelas_cartao?: number
+    }
   | {
       forma: 'PRAZO'
       valor_total: number

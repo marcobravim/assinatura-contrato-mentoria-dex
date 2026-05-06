@@ -23,6 +23,7 @@ const pagamentoSchema = z.discriminatedUnion('forma', [
     valor_total: z.coerce.number().positive('Valor total > 0'),
     data: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, 'Data inválida'),
     meio_pagamento: meioPagamentoSchema,
+    parcelas_cartao: z.coerce.number().int().min(1).max(24).optional(),
   }),
   z.object({
     forma: z.literal('PRAZO'),

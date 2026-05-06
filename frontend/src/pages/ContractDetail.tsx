@@ -97,6 +97,9 @@ export function ContractDetail() {
             {p.pagamento.forma === 'VISTA' ? (
               <div className="text-muted-foreground">
                 {new Date(p.pagamento.data + 'T00:00:00').toLocaleDateString('pt-BR')} · {p.pagamento.meio_pagamento}
+                {p.pagamento.meio_pagamento === 'Cartão de crédito' && (p.pagamento.parcelas_cartao ?? 1) > 1
+                  ? ` em ${p.pagamento.parcelas_cartao}x`
+                  : ''}
               </div>
             ) : (
               <div className="text-muted-foreground">

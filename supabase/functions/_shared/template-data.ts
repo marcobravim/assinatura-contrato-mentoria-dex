@@ -25,6 +25,7 @@ export interface PagamentoVista {
   valor_total: number
   data: string // ISO yyyy-mm-dd
   meio_pagamento: string // ex. "Cartão de crédito"
+  parcelas_cartao?: number // só relevante quando meio = Cartão; 1 = à vista no cartão
 }
 
 export interface PagamentoPrazo {
@@ -85,6 +86,11 @@ export function buildTemplateData(d: ClientData, opts: { comercial_email: string
     forma_vista: d.pagamento.forma === 'VISTA',
     vista_data: d.pagamento.forma === 'VISTA' ? formatDate(d.pagamento.data) : '',
     vista_meio: d.pagamento.forma === 'VISTA' ? d.pagamento.meio_pagamento : '',
+    // Sufixo " em Nx" quando o cliente parcelou no cartão (>1x). Vazio em 1x ou
+    // outros meios — mantém a frase do contrato fluida sem condicional dxlt.
+    vista_parcelas_label: d.pagamento.forma === 'VISTA' && d.pagamento.meio_pagamento === 'Cartão de crédito' && (d.pagamento.parcelas_cartao ?? 1) > 1
+      ? ` em ${d.pagamento.parcelas_cartao}x`
+      : '',
     forma_prazo: d.pagamento.forma === 'PRAZO',
     prazo_meio: d.pagamento.forma === 'PRAZO' ? (d.pagamento.meio_pagamento ?? 'Cartão de crédito') : '',
     entrada_valor: d.pagamento.forma === 'PRAZO' ? formatCurrency(d.pagamento.entrada_valor) : '',
