@@ -92,7 +92,7 @@ export function ContractDetail() {
           )}
 
           <div className="rounded-md border p-3">
-            <div className="font-medium">Pagamento — {p.pagamento.forma === 'VISTA' ? 'À Vista' : 'A Prazo'}</div>
+            <div className="font-medium">Pagamento — {p.pagamento.forma === 'VISTA' ? 'Integral' : 'Entrada + parcelado'}</div>
             <div>Total: {formatCurrency(p.pagamento.valor_total)}</div>
             {p.pagamento.forma === 'VISTA' ? (
               <div className="text-muted-foreground">
@@ -100,7 +100,7 @@ export function ContractDetail() {
               </div>
             ) : (
               <div className="text-muted-foreground">
-                Entrada {formatCurrency(p.pagamento.entrada_valor)} em {new Date(p.pagamento.entrada_data + 'T00:00:00').toLocaleDateString('pt-BR')} · {p.pagamento.parcelas_count}x de {formatCurrency(p.pagamento.parcela_valor)} a partir de {new Date(p.pagamento.parcela_primeira_data + 'T00:00:00').toLocaleDateString('pt-BR')}
+                Via {p.pagamento.meio_pagamento ?? 'Cartão de crédito'} · Entrada {formatCurrency(p.pagamento.entrada_valor)} em {new Date(p.pagamento.entrada_data + 'T00:00:00').toLocaleDateString('pt-BR')} · {p.pagamento.parcelas_count}x de {formatCurrency(p.pagamento.parcela_valor)} a partir de {new Date(p.pagamento.parcela_primeira_data + 'T00:00:00').toLocaleDateString('pt-BR')}
               </div>
             )}
           </div>

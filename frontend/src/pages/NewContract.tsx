@@ -34,6 +34,7 @@ export function NewContract() {
         parcelas_count: 10,
         parcela_valor: 2300,
         parcela_primeira_data: new Date().toISOString().slice(0, 10),
+        meio_pagamento: 'Cartão de crédito',
       },
     },
   })
@@ -100,6 +101,7 @@ export function NewContract() {
         parcelas_count: 10,
         parcela_valor: 2300,
         parcela_primeira_data: new Date().toISOString().slice(0, 10),
+        meio_pagamento: 'Cartão de crédito',
       })
     }
   }
@@ -131,8 +133,11 @@ export function NewContract() {
               {errors.data_inicio && <p className="text-xs text-destructive">{errors.data_inicio.message}</p>}
             </div>
             <div className="grid gap-2">
-              <Label htmlFor="valor_entrada_reserva">Valor da reserva (R$) — aparece no texto do contrato</Label>
+              <Label htmlFor="valor_entrada_reserva">Valor da reserva / sinal (R$)</Label>
               <Input id="valor_entrada_reserva" type="number" step="0.01" {...register('valor_entrada_reserva')} />
+              <p className="text-xs text-muted-foreground">
+                Valor pago antecipadamente como garantia de vaga. Geralmente igual à entrada do parcelamento, mas pode ser diferente se houver sinal pago à parte.
+              </p>
               {errors.valor_entrada_reserva && <p className="text-xs text-destructive">{errors.valor_entrada_reserva.message}</p>}
             </div>
           </CardContent>
@@ -204,10 +209,10 @@ export function NewContract() {
           <CardContent className="grid gap-4">
             <div className="flex gap-2">
               <Button type="button" variant={formaPgto === 'VISTA' ? 'default' : 'outline'} onClick={() => setFormaPgto('VISTA')}>
-                À Vista
+                Pagamento integral
               </Button>
               <Button type="button" variant={formaPgto === 'PRAZO' ? 'default' : 'outline'} onClick={() => setFormaPgto('PRAZO')}>
-                A Prazo (entrada + parcelas)
+                Entrada + parcelado
               </Button>
             </div>
 
@@ -223,7 +228,14 @@ export function NewContract() {
                 </div>
                 <div className="grid gap-2">
                   <Label>Meio de pagamento</Label>
-                  <Input placeholder="Cartão, PIX…" {...register('pagamento.meio_pagamento' as const)} />
+                  <select
+                    className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                    {...register('pagamento.meio_pagamento' as const)}
+                  >
+                    <option>Cartão de crédito</option>
+                    <option>PIX</option>
+                    <option>Boleto</option>
+                  </select>
                 </div>
               </div>
             ) : (
@@ -233,6 +245,18 @@ export function NewContract() {
                   <Input type="number" step="0.01" {...register('pagamento.valor_total')} />
                 </div>
                 <div className="grid gap-2">
+                  <Label>Meio de pagamento</Label>
+                  <select
+                    className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                    {...register('pagamento.meio_pagamento' as const)}
+                  >
+                    <option>Cartão de crédito</option>
+                    <option>PIX</option>
+                    <option>Boleto</option>
+                  </select>
+                </div>
+                <div className="grid gap-2 sm:col-span-1" />
+                <div className="grid gap-2">
                   <Label>Entrada (R$)</Label>
                   <Input type="number" step="0.01" {...register('pagamento.entrada_valor' as const)} />
                 </div>
@@ -240,6 +264,7 @@ export function NewContract() {
                   <Label>Data da entrada</Label>
                   <Input type="date" {...register('pagamento.entrada_data' as const)} />
                 </div>
+                <div className="grid gap-2 sm:col-span-1" />
                 <div className="grid gap-2">
                   <Label>Nº de parcelas</Label>
                   <Input type="number" {...register('pagamento.parcelas_count' as const)} />
@@ -249,7 +274,7 @@ export function NewContract() {
                   <Input type="number" step="0.01" {...register('pagamento.parcela_valor' as const)} />
                 </div>
                 <div className="grid gap-2">
-                  <Label>Data da 1ª parcela</Label>
+                  <Label>Data da 1ª cobrança</Label>
                   <Input type="date" {...register('pagamento.parcela_primeira_data' as const)} />
                 </div>
               </div>

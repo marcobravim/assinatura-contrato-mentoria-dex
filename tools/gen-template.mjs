@@ -180,7 +180,9 @@ const doc = new Document({
         // Bloco A Prazo
         P('{#forma_prazo}'),
         runs([
-          new TextRun({ text: 'Entrada de ' }),
+          new TextRun({ text: 'Pagamento parcelado via ' }),
+          new TextRun({ text: '{prazo_meio}', bold: true }),
+          new TextRun({ text: ': entrada de ' }),
           new TextRun({ text: '{entrada_valor}', bold: true }),
           new TextRun({ text: ' em ' }),
           new TextRun({ text: '{entrada_data}', bold: true }),
@@ -199,7 +201,7 @@ const doc = new Document({
               tableHeader: true,
               children: [
                 cell('Parcela', { bold: true, width: 2000 }),
-                cell('Data de vencimento', { bold: true, width: 4000 }),
+                cell('Data de cobrança', { bold: true, width: 4000 }),
                 cell('Valor', { bold: true, width: 3000 }),
               ],
             }),

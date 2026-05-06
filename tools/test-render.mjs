@@ -27,6 +27,7 @@ const data = {
   vista_data: '',
   vista_meio: '',
   forma_prazo: true,
+  prazo_meio: 'Cartão de crédito',
   entrada_valor: 'R$ 1.997,00',
   entrada_data: '10/02/2026',
   parcelas_count: 10,

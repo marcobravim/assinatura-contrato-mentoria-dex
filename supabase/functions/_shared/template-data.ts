@@ -35,6 +35,7 @@ export interface PagamentoPrazo {
   parcelas_count: number
   parcela_valor: number
   parcela_primeira_data: string
+  meio_pagamento: string
 }
 
 export type Pagamento = PagamentoVista | PagamentoPrazo
@@ -79,12 +80,13 @@ export function buildTemplateData(d: ClientData, opts: { comercial_email: string
     valor_entrada_reserva: formatCurrency(d.valor_entrada_reserva),
 
     // pagamento — dois blocos condicionais no template: {#forma_vista}...{/forma_vista} e {#forma_prazo}...{/forma_prazo}
-    forma_pagamento: d.pagamento.forma === 'VISTA' ? 'À Vista' : 'A Prazo',
+    forma_pagamento: d.pagamento.forma === 'VISTA' ? 'Pagamento integral' : 'Entrada + parcelado',
     valor_total: formatCurrency(d.pagamento.valor_total),
     forma_vista: d.pagamento.forma === 'VISTA',
     vista_data: d.pagamento.forma === 'VISTA' ? formatDate(d.pagamento.data) : '',
     vista_meio: d.pagamento.forma === 'VISTA' ? d.pagamento.meio_pagamento : '',
     forma_prazo: d.pagamento.forma === 'PRAZO',
+    prazo_meio: d.pagamento.forma === 'PRAZO' ? (d.pagamento.meio_pagamento ?? 'Cartão de crédito') : '',
     entrada_valor: d.pagamento.forma === 'PRAZO' ? formatCurrency(d.pagamento.entrada_valor) : '',
     entrada_data: d.pagamento.forma === 'PRAZO' ? formatDate(d.pagamento.entrada_data) : '',
     parcelas_count: d.pagamento.forma === 'PRAZO' ? d.pagamento.parcelas_count : 0,

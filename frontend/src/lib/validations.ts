@@ -15,12 +15,14 @@ const participanteSchema = z.object({
 
 const socioSchema = participanteSchema.omit({ endereco: true })
 
+const meioPagamentoSchema = z.enum(['Cartão de crédito', 'PIX', 'Boleto'])
+
 const pagamentoSchema = z.discriminatedUnion('forma', [
   z.object({
     forma: z.literal('VISTA'),
     valor_total: z.coerce.number().positive('Valor total > 0'),
     data: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, 'Data inválida'),
-    meio_pagamento: z.string().min(2, 'Informe o meio (cartão, PIX...)'),
+    meio_pagamento: meioPagamentoSchema,
   }),
   z.object({
     forma: z.literal('PRAZO'),
@@ -30,6 +32,7 @@ const pagamentoSchema = z.discriminatedUnion('forma', [
     parcelas_count: z.coerce.number().int().min(1, '1+ parcelas').max(24, 'Máximo 24'),
     parcela_valor: z.coerce.number().positive('Valor da parcela > 0'),
     parcela_primeira_data: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, 'Data da 1ª parcela inválida'),
+    meio_pagamento: meioPagamentoSchema,
   }),
 ])
 

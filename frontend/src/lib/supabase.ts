@@ -29,8 +29,10 @@ export interface Socio {
   email: string
 }
 
+export type MeioPagamento = 'Cartão de crédito' | 'PIX' | 'Boleto'
+
 export type Pagamento =
-  | { forma: 'VISTA'; valor_total: number; data: string; meio_pagamento: string }
+  | { forma: 'VISTA'; valor_total: number; data: string; meio_pagamento: MeioPagamento }
   | {
       forma: 'PRAZO'
       valor_total: number
@@ -39,6 +41,7 @@ export type Pagamento =
       parcelas_count: number
       parcela_valor: number
       parcela_primeira_data: string
+      meio_pagamento: MeioPagamento
     }
 
 export interface ClientData {
