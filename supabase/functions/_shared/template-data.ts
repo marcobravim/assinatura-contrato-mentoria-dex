@@ -86,6 +86,13 @@ export function buildTemplateData(d: ClientData, opts: { comercial_email: string
     forma_vista: d.pagamento.forma === 'VISTA',
     vista_data: d.pagamento.forma === 'VISTA' ? formatDate(d.pagamento.data) : '',
     vista_meio: d.pagamento.forma === 'VISTA' ? d.pagamento.meio_pagamento : '',
+    // " em Nx" quando é cartão de crédito + parcelas_cartao > 1; vazio caso contrário
+    vista_parcelas_label:
+      d.pagamento.forma === 'VISTA'
+      && d.pagamento.meio_pagamento === 'Cartão de crédito'
+      && (d.pagamento.parcelas_cartao ?? 1) > 1
+        ? ` em ${d.pagamento.parcelas_cartao}x`
+        : '',
     // Sufixo " em Nx" quando o cliente parcelou no cartão (>1x). Vazio em 1x ou
     // outros meios — mantém a frase do contrato fluida sem condicional dxlt.
     vista_parcelas_label: d.pagamento.forma === 'VISTA' && d.pagamento.meio_pagamento === 'Cartão de crédito' && (d.pagamento.parcelas_cartao ?? 1) > 1
