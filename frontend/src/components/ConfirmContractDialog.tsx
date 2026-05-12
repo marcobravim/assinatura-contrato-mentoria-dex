@@ -1,8 +1,9 @@
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { Button } from '@/components/ui/button'
-import { Loader2, Pencil, Send } from 'lucide-react'
+import { AlertTriangle, Loader2, Pencil, Send } from 'lucide-react'
 import type { ContractFormValues } from '@/lib/validations'
 import { formatCPFOrCNPJ, formatPhone, formatCurrency } from '@/lib/format'
+import { checkValorTotal } from '@/lib/business-rules'
 
 interface Props {
   open: boolean
@@ -47,6 +48,7 @@ function Section({ title, children }: { title: string; children: React.ReactNode
 
 export function ConfirmContractDialog({ open, onOpenChange, data, submitting, onConfirm }: Props) {
   if (!data) return null
+  const valorWarning = checkValorTotal(data.pagamento.valor_total)
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -57,6 +59,16 @@ export function ConfirmContractDialog({ open, onOpenChange, data, submitting, on
             Revise os dados abaixo. Depois de enviar, o contrato vai pro Autentique e não dá pra editar — só apagar e refazer.
           </DialogDescription>
         </DialogHeader>
+
+        {valorWarning && (
+          <div className="flex items-start gap-2 rounded-md border-2 border-amber-400 bg-amber-50 p-3 text-sm text-amber-900">
+            <AlertTriangle className="mt-0.5 h-5 w-5 flex-shrink-0" />
+            <div>
+              <div className="font-semibold">Atenção: confira o valor antes de enviar</div>
+              <div className="mt-1">{valorWarning.message}</div>
+            </div>
+          </div>
+        )}
 
         <div className="space-y-3">
           <Section title="Modalidade e prazo">

@@ -13,6 +13,8 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { ArrowLeft, Loader2, MapPin } from 'lucide-react'
 import { TourButton } from '@/components/Tour'
 import { ConfirmContractDialog } from '@/components/ConfirmContractDialog'
+import { checkValorTotal } from '@/lib/business-rules'
+import { AlertTriangle } from 'lucide-react'
 
 export function NewContract() {
   const nav = useNavigate()
@@ -47,6 +49,8 @@ export function NewContract() {
   const modalidade = watch('modalidade')
   const formaPgto = watch('pagamento.forma')
   const meioPgto = watch('pagamento.meio_pagamento')
+  const valorTotal = Number(watch('pagamento.valor_total'))
+  const valorWarning = checkValorTotal(valorTotal)
 
   async function handleCepLookup() {
     const addr = await lookupCEP(cepBusca)
@@ -239,6 +243,15 @@ export function NewContract() {
                 Entrada + parcelado
               </Button>
             </div>
+
+            {valorWarning && (
+              <div className="flex items-start gap-2 rounded-md border border-amber-300 bg-amber-50 p-3 text-sm text-amber-900">
+                <AlertTriangle className="mt-0.5 h-4 w-4 flex-shrink-0" />
+                <div>
+                  <span className="font-medium">Atenção:</span> {valorWarning.message}
+                </div>
+              </div>
+            )}
 
             {formaPgto === 'VISTA' ? (
               <div className="grid gap-4 sm:grid-cols-3">
