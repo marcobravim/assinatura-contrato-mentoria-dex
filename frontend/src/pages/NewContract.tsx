@@ -12,12 +12,15 @@ import { Textarea } from '@/components/ui/textarea'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { ArrowLeft, Loader2, MapPin } from 'lucide-react'
 import { TourButton } from '@/components/Tour'
+import { ConfirmContractDialog } from '@/components/ConfirmContractDialog'
 
 export function NewContract() {
   const nav = useNavigate()
   const [submitting, setSubmitting] = useState(false)
   const [erro, setErro] = useState<string | null>(null)
   const [cepBusca, setCepBusca] = useState('')
+  // Dados validados aguardando confirmação no dialog. null = dialog fechado.
+  const [pendingData, setPendingData] = useState<ContractFormValues | null>(null)
 
   const form = useForm<ContractFormValues>({
     resolver: zodResolver(contractSchema),
@@ -50,21 +53,29 @@ export function NewContract() {
     if (addr) setValue('participante.endereco', addr)
   }
 
-  async function onSubmit(data: ContractFormValues) {
+  // Validou o form → abre o dialog de confirmação (não envia ainda).
+  function onSubmit(data: ContractFormValues) {
+    setErro(null)
+    setPendingData(data)
+  }
+
+  // Usuário confirmou no dialog → normaliza e dispara o envio pra edge function.
+  async function handleConfirmSend() {
+    if (!pendingData) return
     setSubmitting(true)
     setErro(null)
     const normalized: ContractFormValues = {
-      ...data,
+      ...pendingData,
       participante: {
-        ...data.participante,
-        cpf_cnpj: onlyDigits(data.participante.cpf_cnpj),
-        telefone: onlyDigits(data.participante.telefone),
+        ...pendingData.participante,
+        cpf_cnpj: onlyDigits(pendingData.participante.cpf_cnpj),
+        telefone: onlyDigits(pendingData.participante.telefone),
       },
-      socio: data.socio
+      socio: pendingData.socio
         ? {
-            ...data.socio,
-            cpf_cnpj: onlyDigits(data.socio.cpf_cnpj),
-            telefone: onlyDigits(data.socio.telefone),
+            ...pendingData.socio,
+            cpf_cnpj: onlyDigits(pendingData.socio.cpf_cnpj),
+            telefone: onlyDigits(pendingData.socio.telefone),
           }
         : null,
     }
@@ -72,6 +83,7 @@ export function NewContract() {
     setSubmitting(false)
     if (error) {
       setErro(error.message)
+      setPendingData(null)
       return
     }
     nav(`/contrato/${res.contract_id}`)
@@ -315,10 +327,18 @@ export function NewContract() {
         <div className="flex justify-end gap-2" data-tour="enviar">
           <Button type="button" variant="outline" asChild><Link to="/">Cancelar</Link></Button>
           <Button type="submit" disabled={submitting}>
-            {submitting ? <><Loader2 className="h-4 w-4 animate-spin" /> Gerando…</> : 'Gerar e enviar para assinatura'}
+            {submitting ? <><Loader2 className="h-4 w-4 animate-spin" /> Enviando…</> : 'Revisar e enviar'}
           </Button>
         </div>
       </form>
+
+      <ConfirmContractDialog
+        open={pendingData !== null}
+        onOpenChange={(open) => { if (!open && !submitting) setPendingData(null) }}
+        data={pendingData}
+        submitting={submitting}
+        onConfirm={handleConfirmSend}
+      />
     </div>
   )
 }
