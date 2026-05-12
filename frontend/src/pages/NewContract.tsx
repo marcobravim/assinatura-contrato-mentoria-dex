@@ -84,14 +84,28 @@ export function NewContract() {
           }
         : null,
     }
-    const { data: res, error } = await supabase.functions.invoke('create-contract', { body: normalized })
+    // Não usa supabase.functions.invoke porque ele esconde o body do erro 500.
+    // Fetch direto deixa a gente ler a mensagem real do edge function.
+    const { data: session } = await supabase.auth.getSession()
+    const token = session.session?.access_token
+    const url = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/create-contract`
+    const resp = await fetch(url, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${token}`,
+        apikey: import.meta.env.VITE_SUPABASE_ANON_KEY,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(normalized),
+    })
     setSubmitting(false)
-    if (error) {
-      setErro(error.message)
+    const json = await resp.json().catch(() => null) as { contract_id?: string; error?: string } | null
+    if (!resp.ok || !json?.contract_id) {
+      setErro(json?.error ?? `Erro ${resp.status} ao criar contrato`)
       setPendingData(null)
       return
     }
-    nav(`/contrato/${res.contract_id}`)
+    nav(`/contrato/${json.contract_id}`)
   }
 
   function setModalidade(m: 'INDIVIDUAL' | 'DUPLA') {
