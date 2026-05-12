@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { StatusBadge } from '@/components/StatusBadge'
 import { formatCurrency } from '@/lib/format'
-import { ArrowLeft, ExternalLink, Trash2 } from 'lucide-react'
+import { ArrowLeft, ExternalLink, Trash2, Mail, Link2, Loader2 } from 'lucide-react'
 import { CopyLinkButton } from '@/components/CopyLinkButton'
 
 export function ContractDetail() {
@@ -14,6 +14,8 @@ export function ContractDetail() {
   const [contract, setContract] = useState<Contract | null>(null)
   const [loading, setLoading] = useState(true)
   const [deleting, setDeleting] = useState(false)
+  const [resending, setResending] = useState(false)
+  const [generatingLink, setGeneratingLink] = useState(false)
 
   useEffect(() => {
     if (!id) return
@@ -39,6 +41,48 @@ export function ContractDetail() {
       supabase.removeChannel(channel)
     }
   }, [id])
+
+  async function callSignatureAction(action: 'resend' | 'generate-link'): Promise<{ ok?: boolean; link?: string; error?: string }> {
+    const { data: session } = await supabase.auth.getSession()
+    const token = session.session?.access_token
+    const url = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/signature-actions`
+    const resp = await fetch(url, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${token}`,
+        apikey: import.meta.env.VITE_SUPABASE_ANON_KEY,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ contract_id: contract?.id, action }),
+    })
+    return (await resp.json().catch(() => ({}))) as { ok?: boolean; link?: string; error?: string }
+  }
+
+  async function handleResend() {
+    if (!contract) return
+    setResending(true)
+    const r = await callSignatureAction('resend')
+    setResending(false)
+    window.alert(r.ok ? 'E-mail de assinatura reenviado pro mentorado.' : `Falha: ${r.error ?? 'erro desconhecido'}`)
+  }
+
+  async function handleGenerateLink() {
+    if (!contract) return
+    setGeneratingLink(true)
+    const r = await callSignatureAction('generate-link')
+    setGeneratingLink(false)
+    if (r.ok && r.link) {
+      setContract({ ...contract, autentique_short_link: r.link })
+      try {
+        await navigator.clipboard.writeText(r.link)
+        window.alert(`Novo link gerado e copiado pra área de transferência:\n${r.link}`)
+      } catch {
+        window.prompt('Novo link de assinatura — copie:', r.link)
+      }
+    } else {
+      window.alert(`Falha: ${r.error ?? 'erro desconhecido'}`)
+    }
+  }
 
   async function handleDelete() {
     if (!contract) return
@@ -117,6 +161,17 @@ export function ContractDetail() {
                 </a>
               </Button>
               <CopyLinkButton link={c.autentique_short_link} size="default" label="Copiar link" />
+            </div>
+          )}
+
+          {c.status !== 'archived' && c.autentique_document_id && (
+            <div className="flex flex-wrap gap-2 border-t pt-3">
+              <Button variant="outline" onClick={handleResend} disabled={resending}>
+                {resending ? <><Loader2 className="h-4 w-4 animate-spin" /> Reenviando…</> : <><Mail className="h-4 w-4" /> Reenviar e-mail pro mentorado</>}
+              </Button>
+              <Button variant="outline" onClick={handleGenerateLink} disabled={generatingLink}>
+                {generatingLink ? <><Loader2 className="h-4 w-4 animate-spin" /> Gerando…</> : <><Link2 className="h-4 w-4" /> Gerar novo link de assinatura</>}
+              </Button>
             </div>
           )}
 
