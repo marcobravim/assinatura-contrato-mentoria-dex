@@ -5,7 +5,8 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { StatusBadge } from '@/components/StatusBadge'
 import { formatCurrency } from '@/lib/format'
-import { Plus, LogOut, Trash2 } from 'lucide-react'
+import { Plus, LogOut, Trash2, ExternalLink } from 'lucide-react'
+import { CopyLinkButton } from '@/components/CopyLinkButton'
 
 export function Dashboard() {
   const [contracts, setContracts] = useState<Contract[]>([])
@@ -100,6 +101,27 @@ export function Dashboard() {
                 </CardTitle>
                 <div className="flex items-center gap-2">
                   <StatusBadge status={c.status} />
+                  {c.autentique_short_link && c.status !== 'archived' && (
+                    <>
+                      <CopyLinkButton link={c.autentique_short_link} size="icon" />
+                      <Button
+                        variant="outline"
+                        size="icon"
+                        asChild
+                        aria-label="Abrir link de assinatura"
+                        className="h-8 w-8"
+                      >
+                        <a
+                          href={c.autentique_short_link}
+                          target="_blank"
+                          rel="noreferrer"
+                          onClick={(e) => e.stopPropagation()}
+                        >
+                          <ExternalLink className="h-4 w-4" />
+                        </a>
+                      </Button>
+                    </>
+                  )}
                   <Button
                     variant="ghost"
                     size="icon"

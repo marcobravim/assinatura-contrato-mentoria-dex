@@ -6,6 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { StatusBadge } from '@/components/StatusBadge'
 import { formatCurrency } from '@/lib/format'
 import { ArrowLeft, ExternalLink, Trash2 } from 'lucide-react'
+import { CopyLinkButton } from '@/components/CopyLinkButton'
 
 export function ContractDetail() {
   const { id } = useParams<{ id: string }>()
@@ -109,11 +110,14 @@ export function ContractDetail() {
           </div>
 
           {c.autentique_short_link && (
-            <Button asChild variant="outline">
-              <a href={c.autentique_short_link} target="_blank" rel="noreferrer">
-                Abrir link de assinatura <ExternalLink className="h-4 w-4" />
-              </a>
-            </Button>
+            <div className="flex flex-wrap gap-2">
+              <Button asChild variant="outline">
+                <a href={c.autentique_short_link} target="_blank" rel="noreferrer">
+                  Abrir link de assinatura <ExternalLink className="h-4 w-4" />
+                </a>
+              </Button>
+              <CopyLinkButton link={c.autentique_short_link} size="default" label="Copiar link" />
+            </div>
           )}
 
           {c.signed_pdf_drive_id && (
