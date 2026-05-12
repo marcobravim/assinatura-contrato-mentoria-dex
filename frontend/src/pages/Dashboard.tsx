@@ -53,10 +53,22 @@ export function Dashboard() {
     )
     if (!ok) return
     setContracts((prev) => prev.filter((x) => x.id !== c.id))
-    const { error } = await supabase.functions.invoke('delete-contract', { body: { contract_id: c.id } })
-    if (error) {
-      window.alert(`Falha ao apagar: ${error.message}`)
-      // rollback otimístico — recarrega
+    // fetch direto (não invoke) pra ler o body do erro quando a Autentique
+    // retorna não-2xx — invoke esconde a mensagem real.
+    const { data: session } = await supabase.auth.getSession()
+    const token = session.session?.access_token
+    const resp = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/delete-contract`, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${token}`,
+        apikey: import.meta.env.VITE_SUPABASE_ANON_KEY,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ contract_id: c.id }),
+    })
+    const body = await resp.json().catch(() => null) as { ok?: boolean; error?: string } | null
+    if (!resp.ok || !body?.ok) {
+      window.alert(`Falha ao apagar: ${body?.error ?? `HTTP ${resp.status}`}`)
       const { data } = await supabase.from('contracts').select('*').order('created_at', { ascending: false })
       if (data) setContracts(data as Contract[])
     }

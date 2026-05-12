@@ -91,10 +91,21 @@ export function ContractDetail() {
     )
     if (!ok) return
     setDeleting(true)
-    const { error } = await supabase.functions.invoke('delete-contract', { body: { contract_id: contract.id } })
+    const { data: session } = await supabase.auth.getSession()
+    const token = session.session?.access_token
+    const resp = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/delete-contract`, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${token}`,
+        apikey: import.meta.env.VITE_SUPABASE_ANON_KEY,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ contract_id: contract.id }),
+    })
+    const body = await resp.json().catch(() => null) as { ok?: boolean; error?: string } | null
     setDeleting(false)
-    if (error) {
-      window.alert(`Falha ao apagar: ${error.message}`)
+    if (!resp.ok || !body?.ok) {
+      window.alert(`Falha ao apagar: ${body?.error ?? `HTTP ${resp.status}`}`)
       return
     }
     nav('/', { replace: true })
