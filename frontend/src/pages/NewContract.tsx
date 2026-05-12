@@ -7,6 +7,7 @@ import { contractSchema, type ContractFormValues } from '@/lib/validations'
 import { formatCPFOrCNPJ, formatPhone, lookupCEP, onlyDigits } from '@/lib/format'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import { MoneyInput } from '@/components/ui/money-input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
@@ -45,7 +46,7 @@ export function NewContract() {
     },
   })
 
-  const { register, handleSubmit, setValue, watch, formState: { errors } } = form
+  const { register, handleSubmit, setValue, watch, control, formState: { errors } } = form
   const modalidade = watch('modalidade')
   const formaPgto = watch('pagamento.forma')
   const meioPgto = watch('pagamento.meio_pagamento')
@@ -162,7 +163,7 @@ export function NewContract() {
             </div>
             <div className="flex flex-col gap-2" data-tour="valor-reserva">
               <Label htmlFor="valor_entrada_reserva">Valor da reserva / sinal (R$)</Label>
-              <Input id="valor_entrada_reserva" type="number" step="0.01" {...register('valor_entrada_reserva')} />
+              <MoneyInput id="valor_entrada_reserva" control={control} name="valor_entrada_reserva" />
               <p className="text-xs text-muted-foreground">
                 Valor pago antecipadamente como garantia de vaga. Geralmente igual à entrada do parcelamento, mas pode ser diferente se houver sinal pago à parte.
               </p>
@@ -257,7 +258,7 @@ export function NewContract() {
               <div className="grid gap-4 sm:grid-cols-3">
                 <div className="flex flex-col gap-2">
                   <Label>Valor total (R$)</Label>
-                  <Input type="number" step="0.01" {...register('pagamento.valor_total')} />
+                  <MoneyInput control={control} name="pagamento.valor_total" />
                 </div>
                 <div className="flex flex-col gap-2">
                   <Label>Data do pagamento</Label>
@@ -295,7 +296,7 @@ export function NewContract() {
               <div className="grid gap-4 sm:grid-cols-3" data-tour="parcelamento">
                 <div className="flex flex-col gap-2">
                   <Label>Valor total (R$)</Label>
-                  <Input type="number" step="0.01" {...register('pagamento.valor_total')} />
+                  <MoneyInput control={control} name="pagamento.valor_total" />
                 </div>
                 <div className="flex flex-col gap-2" data-tour="meio-pagamento">
                   <Label>Meio de pagamento</Label>
@@ -311,7 +312,7 @@ export function NewContract() {
                 <div className="grid gap-2 sm:col-span-1" />
                 <div className="flex flex-col gap-2">
                   <Label>Entrada (R$)</Label>
-                  <Input type="number" step="0.01" {...register('pagamento.entrada_valor' as const)} />
+                  <MoneyInput control={control} name="pagamento.entrada_valor" />
                 </div>
                 <div className="flex flex-col gap-2">
                   <Label>Data da entrada</Label>
@@ -324,7 +325,7 @@ export function NewContract() {
                 </div>
                 <div className="flex flex-col gap-2">
                   <Label>Valor de cada parcela (R$)</Label>
-                  <Input type="number" step="0.01" {...register('pagamento.parcela_valor' as const)} />
+                  <MoneyInput control={control} name="pagamento.parcela_valor" />
                 </div>
                 <div className="flex flex-col gap-2">
                   <Label>Data da 1ª cobrança</Label>
