@@ -15,14 +15,17 @@ const participanteSchema = z.object({
 
 const socioSchema = participanteSchema.omit({ endereco: true })
 
-const meioPagamentoSchema = z.enum(['Cartão de crédito', 'PIX', 'Boleto'])
+// VISTA suporta meio único; PRAZO adiciona 'PIX + Cartão de crédito'
+// (entrada via PIX, parcelas no cartão).
+const meioPagamentoVistaSchema = z.enum(['Cartão de crédito', 'PIX', 'Boleto'])
+const meioPagamentoPrazoSchema = z.enum(['Cartão de crédito', 'PIX', 'Boleto', 'PIX + Cartão de crédito'])
 
 const pagamentoSchema = z.discriminatedUnion('forma', [
   z.object({
     forma: z.literal('VISTA'),
     valor_total: z.coerce.number().positive('Valor total > 0'),
     data: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, 'Data inválida'),
-    meio_pagamento: meioPagamentoSchema,
+    meio_pagamento: meioPagamentoVistaSchema,
     parcelas_cartao: z.coerce.number().int().min(1).max(24).optional(),
   }),
   z.object({
@@ -33,7 +36,7 @@ const pagamentoSchema = z.discriminatedUnion('forma', [
     parcelas_count: z.coerce.number().int().min(1, '1+ parcelas').max(24, 'Máximo 24'),
     parcela_valor: z.coerce.number().positive('Valor da parcela > 0'),
     parcela_primeira_data: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, 'Data da 1ª parcela inválida'),
-    meio_pagamento: meioPagamentoSchema,
+    meio_pagamento: meioPagamentoPrazoSchema,
   }),
 ])
 

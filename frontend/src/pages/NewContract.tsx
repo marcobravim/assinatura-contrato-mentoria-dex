@@ -321,6 +321,7 @@ export function NewContract() {
                     <option>Cartão de crédito</option>
                     <option>PIX</option>
                     <option>Boleto</option>
+                    <option>PIX + Cartão de crédito</option>
                   </select>
                 </div>
                 <div className="grid gap-2 sm:col-span-1" />
