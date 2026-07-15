@@ -1,6 +1,6 @@
 // Regras de negócio compartilhadas entre form e popup de confirmação.
 
-// Range esperado pro valor total do contrato Mentoria DEX.
+// Range esperado pro valor total do contrato Mentoria DSD.
 // Valor fora dessa faixa não bloqueia o envio (pode ser caso legítimo),
 // mas dispara um alerta de atenção pra detectar erros de digitação
 // (ex: R$ 30 em vez de R$ 30.000).
@@ -14,13 +14,13 @@ export function checkValorTotal(valor: number): ValorWarning {
   if (valor < VALOR_MIN_ESPERADO) {
     return {
       kind: 'baixo',
-      message: `Valor abaixo do esperado para Mentoria DEX (entre R$ ${VALOR_MIN_ESPERADO.toLocaleString('pt-BR')} e R$ ${VALOR_MAX_ESPERADO.toLocaleString('pt-BR')}). Confirme se não falta um zero.`,
+      message: `Valor abaixo do esperado para Mentoria DSD (entre R$ ${VALOR_MIN_ESPERADO.toLocaleString('pt-BR')} e R$ ${VALOR_MAX_ESPERADO.toLocaleString('pt-BR')}). Confirme se não falta um zero.`,
     }
   }
   if (valor > VALOR_MAX_ESPERADO) {
     return {
       kind: 'alto',
-      message: `Valor acima do esperado para Mentoria DEX (entre R$ ${VALOR_MIN_ESPERADO.toLocaleString('pt-BR')} e R$ ${VALOR_MAX_ESPERADO.toLocaleString('pt-BR')}). Confirme se está correto.`,
+      message: `Valor acima do esperado para Mentoria DSD (entre R$ ${VALOR_MIN_ESPERADO.toLocaleString('pt-BR')} e R$ ${VALOR_MAX_ESPERADO.toLocaleString('pt-BR')}). Confirme se está correto.`,
     }
   }
   return null

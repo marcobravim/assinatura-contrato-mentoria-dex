@@ -78,7 +78,7 @@ export function Dashboard() {
     <div className="container py-8">
       <div className="mb-6 flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">Assinatura de Contrato - Mentoria DEX</h1>
+          <h1 className="text-3xl font-bold tracking-tight">Assinatura de Contrato - Mentoria DSD</h1>
           <p className="text-muted-foreground">Seus contratos enviados para assinatura</p>
         </div>
         <div className="flex gap-2">

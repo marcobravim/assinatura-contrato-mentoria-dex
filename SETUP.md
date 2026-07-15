@@ -25,7 +25,7 @@ Guia completo para colocar o sistema em produção. Segue a ordem recomendada �
 
 ### Placeholders suportados no template
 
-O app usa o contrato Mentoria DEX (Cris Miura Treinamentos). Sintaxe `{nome}` (chave única — padrão do docxtemplater). Cada placeholder precisa estar numa mesma corrida de texto no Word (sem troca de fonte/cor no meio), senão o motor não reconhece.
+O app usa o contrato Mentoria DSD (Cris Miura Treinamentos). Sintaxe `{nome}` (chave única — padrão do docxtemplater). Cada placeholder precisa estar numa mesma corrida de texto no Word (sem troca de fonte/cor no meio), senão o motor não reconhece.
 
 **Identidade e contrato:**
 - `{nome_completo}` — nome do participante

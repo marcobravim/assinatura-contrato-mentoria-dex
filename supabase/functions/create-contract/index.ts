@@ -42,7 +42,7 @@ Deno.serve(async (req) => {
 
     const sa = loadServiceAccount()
     const token = await getDriveAccessToken(sa, ['https://www.googleapis.com/auth/drive'])
-    const pdfBytes = await docxToPdf(docxBytes, token, `Mentoria DEX - ${body.participante.nome}`)
+    const pdfBytes = await docxToPdf(docxBytes, token, `Mentoria DSD - ${body.participante.nome}`)
 
     const { data: inserted, error: insErr } = await admin.from('contracts').insert({ created_by: user.id, client_data: body, status: 'draft' }).select().single()
     if (insErr || !inserted) return jsonResponse({ error: `Falha ao criar registro: ${insErr?.message}` }, 500)
@@ -60,7 +60,7 @@ Deno.serve(async (req) => {
 
     const result = await createDocument({
       token: AUTENTIQUE_TOKEN, sandbox: AUTENTIQUE_SANDBOX,
-      name: `Mentoria DEX - ${body.participante.nome}`,
+      name: `Mentoria DSD - ${body.participante.nome}`,
       signers,
       pdfBytes, filename: `contrato-${inserted.id}.pdf`,
     })

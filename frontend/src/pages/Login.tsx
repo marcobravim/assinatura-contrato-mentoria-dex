@@ -31,7 +31,7 @@ export function Login() {
       <Card className="w-full max-w-sm">
         <CardHeader>
           <CardTitle>Assinatura de Contrato</CardTitle>
-          <CardDescription>Mentoria DEX — entre com seu e-mail</CardDescription>
+          <CardDescription>Mentoria DSD — entre com seu e-mail</CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">

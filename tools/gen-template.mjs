@@ -1,4 +1,4 @@
-// Regenerates contrato-modelo.docx espelhando o contrato Mentoria DEX
+// Regenerates contrato-modelo.docx espelhando o contrato Mentoria DSD
 // (Cris Miura Treinamentos). Sintaxe docxtemplater: {placeholder},
 // {#cond}...{/cond} para blocos condicionais, e {#parcelas}...{/parcelas}
 // para loops.
@@ -28,13 +28,13 @@ function cell(text, opts = {}) {
 
 const doc = new Document({
   creator: 'CRIS MIURA TREINAMENTOS LTDA',
-  title: 'Regras e Termo de Participação - Mentoria DEX',
+  title: 'Regras e Termo de Participação - Mentoria DSD',
   sections: [
     {
       children: [
         new Paragraph({
           alignment: AlignmentType.CENTER,
-          children: [new TextRun({ text: 'REGRAS E TERMO DE PARTICIPAÇÃO — MENTORIA DEX', bold: true, size: 28 })],
+          children: [new TextRun({ text: 'REGRAS E TERMO DE PARTICIPAÇÃO — MENTORIA DSD', bold: true, size: 28 })],
           spacing: { after: 120 },
         }),
         new Paragraph({
@@ -68,7 +68,7 @@ const doc = new Document({
         runs([new TextRun({ text: 'CNPJ: ', bold: true }), new TextRun({ text: '58.185.761/0001-45' })]),
         spacer(),
 
-        P('A Mentoria DEX é um programa em grupo que acompanha e auxilia os membros na construção, venda e entrega de uma odontologia do cuidado, cujo ticket médio pode chegar a R$ 20.000,00 por tratamento periodontal não cirúrgico.'),
+        P('A Mentoria DSD é um programa em grupo que acompanha e auxilia os membros na construção, venda e entrega de uma odontologia do cuidado, cujo ticket médio pode chegar a R$ 20.000,00 por tratamento periodontal não cirúrgico.'),
 
         runs([
           new TextRun({ text: 'É possível realizar a reserva de vaga mediante o pagamento de ' }),
@@ -102,7 +102,7 @@ const doc = new Document({
         P('Encontro de 1h ao vivo no Zoom em que um dos mentores constrói o plano de tratamento do paciente junto com o mentorado antes de iniciar a Terapia Periodontal Não Cirúrgica (TPNC).'),
         B('II) 6 Análises Individuais de Atendimento (SIA ou AIA — antes ou depois do atendimento)'),
         P('Análise individual de atendimento com um Dentista Extraordinário, em que o atendimento de um paciente é analisado ou simulado. Cada análise tem duração de 1h.'),
-        B('III) Comunidade DEx — exclusiva para os membros da mentoria'),
+        B('III) Comunidade DSD — exclusiva para os membros da mentoria'),
         P('Canal direto com a Dra. Cristina Miura e com os mentores para tirar dúvidas e validar estratégias durante a execução do método.'),
         B('IV) 12 DDP — Dias de Prática'),
         P('Evento, em regra aos sábados, com duração de 6h cada, voltado a combater a procrastinação e a executar as etapas indispensáveis para gerar resultados.'),
@@ -113,7 +113,7 @@ const doc = new Document({
         P('Durante o período da mentoria, serão investidos R$ 2.000,00 em estratégias de captação de pacientes via tráfego pago, direcionadas a pessoas em um raio de até 20 km do consultório do mentorado, priorizando tratamentos relacionados a periodontite, mobilidade dentária, perda óssea e manutenção preventiva.'),
         B('VIII) Desafio 20k em 60 dias'),
         B('IX) Desafio 10k de PIC (1 campanha de prevenção por mês)'),
-        B('X) App DEx'),
+        B('X) App DSD'),
         P('Aplicativo com a rota do programa e acompanhamento do progresso financeiro do mentorado.'),
         B('XI) Plantão de Dúvidas Financeiras'),
         P('1h para tirar dúvidas e proporcionar clareza sobre o seu faturamento.'),
@@ -134,7 +134,7 @@ const doc = new Document({
         P('Nos contratos em Dupla, a inadimplência afeta ambos os membros: o acesso ao programa e aos materiais fica vetado para os dois participantes até a total regularização. Encerrado o programa e persistindo a inadimplência, a CONTRATADA tomará as providências legais cabíveis para a cobrança.'),
         P('O participante se compromete a respeitar o sigilo, a confidencialidade, a propriedade intelectual e a exclusividade das informações compartilhadas em todas as plataformas do programa. É proibida toda e qualquer forma de armazenamento, compartilhamento, distribuição ou comercialização, total ou parcial, gratuita ou onerosa, dos materiais, sem a devida autorização por escrito dos seus titulares. A prática de tais condutas configura plágio e/ou pirataria e implica a exclusão imediata do infrator, sem direito a reembolso, sem prejuízo das sanções judiciais nas esferas cível e criminal.'),
         P('Por padrão, as análises individuais do participante são disponibilizadas na área de membros para visualização pelos demais alunos. O participante pode optar pela análise privada — nesse caso, suas análises deixam de ser compartilhadas e, em contrapartida, ele também não terá acesso às análises dos demais.'),
-        P('Pelo presente instrumento, o(a) participante e/ou seu representante legal autoriza(m), a título gratuito, o uso de sua imagem em fotos, filmagens e áudios coletados no programa, para peças publicitárias e institucionais da CONTRATADA e da Mentoria DEX.'),
+        P('Pelo presente instrumento, o(a) participante e/ou seu representante legal autoriza(m), a título gratuito, o uso de sua imagem em fotos, filmagens e áudios coletados no programa, para peças publicitárias e institucionais da CONTRATADA e da Mentoria DSD.'),
         P('É dever do participante manter cordialidade e colaboração com os demais membros e com o time. O descumprimento pode levar à advertência e, em caso de reincidência, à retirada do grupo sem aviso prévio e sem reembolso.'),
         P('Não é permitido utilizar os meios de comunicação da mentoria para divulgar serviços ou produtos, anunciar vagas, realizar enquetes ou entrevistas, próprias ou de terceiros, sem autorização prévia da Coordenação.'),
         P('Não é permitido formar grupos paralelos em WhatsApp, Telegram, e-mail ou redes sociais, sob pena de exclusão imediata do participante.'),
@@ -237,4 +237,4 @@ const doc = new Document({
 
 const buf = await Packer.toBuffer(doc)
 fs.writeFileSync(new URL('./contrato-modelo.docx', import.meta.url), buf)
-console.log('contrato-modelo.docx regenerado (Mentoria DEX — revisado).')
+console.log('contrato-modelo.docx regenerado (Mentoria DSD — revisado).')

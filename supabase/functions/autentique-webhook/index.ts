@@ -76,7 +76,7 @@ function brasiliaDateISO(): string {
 
 function buildDriveFilename(mentoradoNome: string): string {
   const nome = sanitizeFilename(mentoradoNome || 'Mentorado')
-  return `${brasiliaDateISO()} - Contrato Dex - ${nome} [assinado].pdf`
+  return `${brasiliaDateISO()} - Contrato DSD - ${nome} [assinado].pdf`
 }
 
 async function processEvent(docId: string | null, evtType: string) {

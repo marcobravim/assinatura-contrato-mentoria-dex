@@ -1,5 +1,5 @@
 // Shape of the data sent from the contract form. Mirrors the
-// "Mentoria DEX" contract structure (Cris Miura Treinamentos).
+// "Mentoria DSD" contract structure (Cris Miura Treinamentos).
 // Kept in sync with frontend/src/lib/validations.ts.
 
 export type Modalidade = 'INDIVIDUAL' | 'DUPLA'
@@ -93,11 +93,6 @@ export function buildTemplateData(d: ClientData, opts: { comercial_email: string
       && (d.pagamento.parcelas_cartao ?? 1) > 1
         ? ` em ${d.pagamento.parcelas_cartao}x`
         : '',
-    // Sufixo " em Nx" quando o cliente parcelou no cartão (>1x). Vazio em 1x ou
-    // outros meios — mantém a frase do contrato fluida sem condicional dxlt.
-    vista_parcelas_label: d.pagamento.forma === 'VISTA' && d.pagamento.meio_pagamento === 'Cartão de crédito' && (d.pagamento.parcelas_cartao ?? 1) > 1
-      ? ` em ${d.pagamento.parcelas_cartao}x`
-      : '',
     forma_prazo: d.pagamento.forma === 'PRAZO',
     prazo_meio: d.pagamento.forma === 'PRAZO' ? (d.pagamento.meio_pagamento ?? 'Cartão de crédito') : '',
     entrada_valor: d.pagamento.forma === 'PRAZO' ? formatCurrency(d.pagamento.entrada_valor) : '',
